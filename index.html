@@ -4,143 +4,208 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SQC | Super Quant Coders - NIT Jalandhar</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Space+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
-        :root { --neon: #00f2ff; --win-gold: #ffcf33; }
-        body { background: #000; color: #fff; font-family: 'Space Mono', monospace; scroll-behavior: smooth; overflow-x: hidden; }
+        :root {
+            --neon: #3b82f6;
+            --cyan: #22d3ee;
+            --indigo: #6366f1;
+            --slate-depth: #0f172a;
+            --steel: #94a3b8;
+            --dark-bg: #020617; /* Very dark navy instead of pure black */
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: #cbd5e1;
+            font-family: 'Space Mono', monospace;
+            overflow-x: hidden;
+        }
         h1, h2, h3 { font-family: 'Syncopate', sans-serif; }
-        
+
+        /* MULTI-TONAL GRID */
         .bg-grid {
-            background-image: linear-gradient(to right, #0a0a0a 1px, transparent 1px), linear-gradient(to bottom, #0a0a0a 1px, transparent 1px);
-            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+            position: relative;
         }
 
-        /* DISSOLVE EFFECT: Blends image into background */
-        .dissolve-img {
-            -webkit-mask-image: radial-gradient(circle, black 50%, transparent 95%);
-            mask-image: radial-gradient(circle, black 50%, transparent 95%);
-            filter: drop-shadow(0 0 30px rgba(0, 242, 255, 0.15));
+        /* ATMOSPHERIC GRADIENTS */
+        .bg-grid::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(34, 211, 238, 0.03) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(99, 102, 241, 0.03) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 0;
         }
 
+        /* COMPLEX CURSOR GLOW */
+        .cursor-glow {
+            position: fixed;
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, 
+                rgba(59, 130, 246, 0.1) 0%, 
+                rgba(34, 211, 238, 0.05) 20%, 
+                rgba(15, 23, 42, 0) 60%);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+
+        /* MULTI-SHADE METRIC CARDS */
         .metric-card {
-            background: linear-gradient(145deg, rgba(255,255,255,0.01) 0%, rgba(0,242,255,0.05) 100%);
-            border: 1px solid rgba(0, 242, 255, 0.1);
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(148, 163, 184, 0.1); /* Steel border */
             position: relative;
             overflow: hidden;
-            transition: all 0.4s ease;
+        }
+
+        .metric-card::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(225deg, transparent 80%, rgba(34, 211, 238, 0.05) 100%);
         }
 
         .metric-card:hover {
-            border-color: var(--neon);
-            box-shadow: 0 0 40px rgba(0, 242, 255, 0.2);
-            transform: scale(1.02);
+            border-color: var(--cyan);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(34, 211, 238, 0.05);
+            transform: translateY(-5px) scale(1.02);
         }
 
-        .gold-glow {
-            color: var(--win-gold);
-            text-shadow: 0 0 15px rgba(255, 207, 51, 0.5);
+        /* TEXT SHADES */
+        .text-plasma {
+            background: linear-gradient(to right, #94a3b8, #3b82f6, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .scan-line {
-            width: 100%;
-            height: 2px;
-            background: var(--neon);
-            position: absolute;
-            opacity: 0.2;
-            animation: scan 4s linear infinite;
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.2), transparent);
         }
-
-        @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
     </style>
 </head>
+
 <body class="bg-grid">
 
-    <nav class="fixed top-0 w-full z-50 p-6 flex justify-between items-center bg-black/80 backdrop-blur-xl border-b border-white/5">
-        <div class="flex items-center gap-4">
-            <div class="w-10 h-10 border border-cyan-400 flex items-center justify-center font-bold text-cyan-400">S</div>
-            <div class="flex flex-col">
-                <span class="text-white font-bold tracking-tighter text-sm">SUPER QUANT CODERS (SQC)</span>
-                <span class="text-[8px] text-cyan-400/80 tracking-[0.4em] uppercase">NIT JALANDHAR // EST. 2022</span>
-            </div>
-        </div>
-        <div class="hidden md:flex gap-10 text-[9px] tracking-[0.2em] uppercase font-bold">
-            <a href="#home" class="hover:text-cyan-400 transition">Core</a>
-            <a href="#achievements" class="hover:text-cyan-400 transition">Metrics</a>
-            <a href="#social" class="hover:text-cyan-400 transition">Connect</a>
-            <button class="bg-cyan-500 text-black px-5 py-1.5 hover:bg-white transition">ENROLL_NOW</button>
-        </div>
-    </nav>
+<div id="cursorGlow" class="cursor-glow"></div>
 
-    <section id="home" class="min-h-screen flex flex-col items-center justify-center pt-24 px-6 relative">
-        <div class="relative group">
-            <div class="scan-line"></div>
-            <img src="/SQC.jpg" alt="SQC Robot Dog Unitree" class="w-80 md:w-[550px] relative z-10 dissolve-img">
-            <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-black border border-cyan-400 text-cyan-400 text-[9px] z-20 font-bold uppercase tracking-widest">
-                NIT JALANDHAR // RESEARCH_UNIT_02
-            </div>
+<nav class="fixed top-0 w-full z-50 p-6 flex justify-between items-center bg-slate-950/80 backdrop-blur-xl border-b border-slate-800">
+    <div class="flex items-center gap-4">
+        <div class="w-10 h-10 border border-slate-700 bg-slate-900 flex items-center justify-center font-bold text-cyan-400">S</div>
+        <div>
+            <div class="font-bold text-sm tracking-tight text-slate-200">SUPER QUANT CODERS</div>
+            <div class="text-[8px] text-slate-500 tracking-[0.4em]">NIT JALANDHAR // <span class="text-indigo-400/60">RESEARCH_CORE</span></div>
+        </div>
+    </div>
+    <div class="hidden md:flex gap-10 text-[9px] tracking-[0.3em] uppercase font-bold">
+        <a href="#home" class="text-slate-400 hover:text-cyan-400 transition">Terminal</a>
+        <a href="#achievements" class="text-slate-400 hover:text-cyan-400 transition">Archive</a>
+        <a href="#social" class="text-slate-400 hover:text-cyan-400 transition">Uplink</a>
+        <button class="bg-slate-900 border border-slate-700 px-5 py-2 text-slate-300 hover:border-cyan-500/50 hover:text-white transition-all shadow-inner">
+            INITIALIZE_JOIN
+        </button>
+    </div>
+</nav>
+
+<section id="home" class="min-h-screen flex flex-col items-center justify-center pt-24 px-6">
+    <div class="relative group">
+        <img src="/SQC.jpg" class="w-80 md:w-[480px] rounded-lg opacity-80 mix-blend-lighten filter grayscale hover:grayscale-0 transition-all duration-700" style="mask-image: radial-gradient(circle, black 50%, transparent 95%);">
+        <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-slate-900 border border-slate-700 text-slate-500 text-[7px] tracking-[0.6em] uppercase whitespace-nowrap">
+            Core Frequency: <span class="text-indigo-400">4.80GHz</span> // <span class="text-cyan-400">Stable</span>
+        </div>
+    </div>
+
+    <div class="mt-20 text-center">
+        <h1 class="text-5xl md:text-8xl font-black tracking-tighter leading-none text-slate-100">
+            SUPER <span class="text-plasma">QUANT</span> CODERS
+        </h1>
+        <div class="flex items-center justify-center gap-6 mt-8">
+            <div class="h-[1px] w-16 bg-gradient-to-r from-transparent to-slate-700"></div>
+            <p class="text-[10px] text-slate-400 tracking-[1em] uppercase">
+                Robotics <span class="text-slate-600">&</span> Algorithmic Intelligence
+            </p>
+            <div class="h-[1px] w-16 bg-gradient-to-l from-transparent to-slate-700"></div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<section id="achievements" class="py-32 px-6 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div class="metric-card p-10 rounded-xl group border-l-4 border-l-blue-500">
+            <div class="text-slate-500 text-[10px] mb-6 font-bold tracking-widest">RESULT_01</div>
+            <h3 class="text-xl font-bold mb-2 text-slate-200 uppercase">SIH 2023</h3>
+            <p class="text-[11px] text-slate-500 leading-relaxed mb-10">National Robotics Domain. Hardware/Software integration Lead.</p>
+            <div class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-slate-600">CHAMPIONS</div>
+        </div>
+
+        <div class="metric-card p-10 rounded-xl group border-l-4 border-l-cyan-500">
+            <div class="text-slate-500 text-[10px] mb-6 font-bold tracking-widest">RESULT_02</div>
+            <h3 class="text-xl font-bold mb-2 text-slate-200 uppercase">QUANT HACK</h3>
+            <p class="text-[11px] text-slate-500 leading-relaxed mb-10">High-frequency trading model optimization. Global percentile: 99.8.</p>
+            <div class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-cyan-400 to-slate-600">GLOBAL_TOP</div>
+        </div>
+
+        <div class="metric-card p-10 rounded-xl group border-l-4 border-l-indigo-500">
+            <div class="text-slate-500 text-[10px] mb-6 font-bold tracking-widest">RESULT_03</div>
+            <h3 class="text-xl font-bold mb-2 text-slate-200 uppercase">Commits</h3>
+            <p class="text-[11px] text-slate-500 leading-relaxed mb-10">Continuous integration and rapid prototyping across ROS2/C++.</p>
+            <div class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-indigo-400 to-slate-600">5.2K_UNITS</div>
+        </div>
+    </div>
+</section>
+
+<footer class="py-20 bg-slate-950 border-t border-slate-900">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+        <div class="text-[10px] text-slate-600 tracking-[0.5em]">
+            PROJECTS // <span class="text-slate-400">QUADRUPED_02</span> // <span class="text-slate-400">FIN_AI</span>
         </div>
         
-        <div class="mt-16 text-center">
-            <h1 class="text-4xl md:text-8xl font-black tracking-tighter leading-none mb-4">
-                SUPER <span class="text-cyan-400">QUANT</span> CODERS
-            </h1>
-            <p class="text-[10px] md:text-xs text-white/40 uppercase tracking-[0.6em]">
-                Founded 2022 // Quantitative Excellence // Robotics Intelligence
-            </p>
+        <div class="flex gap-8">
+            <a href="#" class="text-slate-500 hover:text-white transition"><i class="fa-brands fa-github"></i></a>
+            <a href="#" class="text-slate-500 hover:text-blue-400 transition"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="#" class="text-slate-500 hover:text-cyan-400 transition"><i class="fa-brands fa-discord"></i></a>
         </div>
-    </section>
 
-    <section id="achievements" class="py-32 px-6 max-w-7xl mx-auto">
-        <h2 class="text-xs tracking-[0.5em] text-white/30 text-center uppercase mb-16">Championship_Record</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            <div class="metric-card p-10 rounded-xl border-t-2 border-t-yellow-500/50">
-                <div class="flex justify-between items-start mb-6">
-                    <i class="fa-solid fa-trophy gold-glow text-2xl"></i>
-                    <span class="text-[10px] text-white/20">2023_RANK_01</span>
-                </div>
-                <h3 class="text-lg mb-2">SMART INDIA HACKATHON</h3>
-                <p class="text-[10px] text-white/50 uppercase leading-relaxed">Winner in Robotics Domain. Revolutionized autonomous quadrupedal navigation.</p>
-                <div class="mt-6 text-2xl font-bold gold-glow">CHAMPIONS</div>
-            </div>
-
-            <div class="metric-card p-10 rounded-xl border-t-2 border-t-cyan-500/50">
-                <div class="flex justify-between items-start mb-6">
-                    <i class="fa-solid fa-code text-cyan-400 text-2xl"></i>
-                    <span class="text-[10px] text-white/20">GLOBAL_FINALIST</span>
-                </div>
-                <h3 class="text-lg mb-2">QUANTUM HACK</h3>
-                <p class="text-[10px] text-white/50 uppercase leading-relaxed">Secured Top 3 finish globally for developing high-frequency alpha strategies.</p>
-                <div class="mt-6 text-2xl font-bold text-cyan-400">TOP_3_GLOBAL</div>
-            </div>
-
-            <div class="metric-card p-10 rounded-xl border-t-2 border-t-purple-500/50">
-                <div class="flex justify-between items-start mb-6">
-                    <i class="fa-solid fa-bolt text-purple-500 text-2xl"></i>
-                    <span class="text-[10px] text-white/20">EST_2022</span>
-                </div>
-                <h3 class="text-lg mb-2">TRACK_RECORD</h3>
-                <p class="text-[10px] text-white/50 uppercase leading-relaxed">5.2K+ Code Commits and 50+ Projects deployed across FinTech and AI.</p>
-                <div class="mt-6 text-2xl font-bold text-purple-500">5.2K_COMMITS</div>
-            </div>
-
+        <div class="text-[9px] text-slate-700">
+            © 2026 SUPER QUANT CODERS. DATA_ENCRYPTED.
         </div>
-    </section>
+    </div>
+</footer>
 
-    <section id="social" class="py-24 border-y border-white/5 bg-white/[0.01]">
-        <div class="flex justify-center gap-16">
-            <a href="#" class="text-white/40 hover:text-cyan-400 transition-all text-2xl"><i class="fa-brands fa-linkedin"></i></a>
-            <a href="#" class="text-white/40 hover:text-cyan-400 transition-all text-2xl"><i class="fa-brands fa-github"></i></a>
-            <a href="#" class="text-white/40 hover:text-cyan-400 transition-all text-2xl"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" class="text-white/40 hover:text-cyan-400 transition-all text-2xl"><i class="fa-brands fa-discord"></i></a>
-        </div>
-    </section>
+<script>
+    const glow = document.getElementById("cursorGlow");
+    let mouseX = 0, mouseY = 0, ballX = 0, ballY = 0;
+    const speed = 0.05;
 
-    <footer class="p-12 text-center text-[9px] opacity-20 tracking-[1em] uppercase">
-        NIT JALANDHAR // SQC // 2026_STABLE
-    </footer>
+    window.addEventListener("mousemove", e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    function animate() {
+        ballX += (mouseX - ballX) * speed;
+        ballY += (mouseY - ballY) * speed;
+        glow.style.left = ballX + "px";
+        glow.style.top = ballY + "px";
+        requestAnimationFrame(animate);
+    }
+    animate();
+</script>
 
 </body>
 </html>
