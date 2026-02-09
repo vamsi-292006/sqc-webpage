@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SQC | Super Quant Coders - NIT Jalandhar</title>
+    <title>SQC | Super Quant Coders - Command Center</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Space+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
         :root {
-            --neon-green: #22c55e;   /* Lush Emerald */
-            --forest: #064e3b;       /* Deep Forest */
-            --lime: #84cc16;         /* Bright Accent */
-            --moss: #14532d;         /* Card Depth */
+            /* EXPANDED LUSH PALETTE */
+            --primary: #22c55e;      /* Emerald */
+            --secondary: #84cc16;    /* Lime */
+            --accent-warn: #facc15;  /* Cyber Yellow (Utility) */
+            --accent-void: #8b5cf6;  /* Tech Violet (Research) */
             --dark-bg: #020604;      /* Deep Jungle Black */
-            --steel-green: #4ade80;
+            --panel-bg: rgba(6, 78, 59, 0.2);
         }
 
         body {
@@ -27,74 +28,62 @@
         }
         h1, h2, h3 { font-family: 'Syncopate', sans-serif; }
 
-        /* LUSH GREEN GRID */
+        /* MULTI-PALETTE GRID */
         .bg-grid {
             background-image: 
                 linear-gradient(to right, rgba(34, 197, 94, 0.05) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(34, 197, 94, 0.05) 1px, transparent 1px);
-            background-size: 60px 60px;
+                linear-gradient(to bottom, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
             position: relative;
         }
 
-        /* AMBIENT MOSS GLOW */
-        .bg-grid::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(20, 83, 45, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 90% 80%, rgba(34, 197, 94, 0.05) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* EMERALD CURSOR GLOW */
         .cursor-glow {
             position: fixed;
-            width: 800px;
-            height: 800px;
+            width: 700px;
+            height: 700px;
             background: radial-gradient(circle, 
-                rgba(34, 197, 94, 0.12) 0%, 
-                rgba(6, 78, 59, 0.05) 25%, 
+                rgba(34, 197, 94, 0.1) 0%, 
+                rgba(139, 92, 246, 0.03) 30%, 
                 transparent 70%);
             pointer-events: none;
             transform: translate(-50%, -50%);
             z-index: 1;
+            transition: width 0.3s, height 0.3s;
         }
 
-        /* GREEN GLASS CARDS */
-        .metric-card {
-            background: linear-gradient(135deg, rgba(6, 78, 59, 0.4) 0%, rgba(2, 6, 4, 0.9) 100%);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(34, 197, 94, 0.15);
+        /* HARDWARE PANEL STYLE */
+        .tech-card {
+            background: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(34, 197, 94, 0.1);
             position: relative;
-            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .tech-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.1);
+            background: rgba(6, 78, 59, 0.3);
         }
 
-        .metric-card::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(225deg, transparent 80%, rgba(132, 204, 22, 0.05) 100%);
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            box-shadow: 0 0 10px currentColor;
         }
 
-        .metric-card:hover {
-            border-color: var(--neon-green);
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(34, 197, 94, 0.1);
-            transform: translateY(-5px) scale(1.02);
-        }
-
-        /* LUSH GRADIENT TEXT */
-        .text-plasma {
-            background: linear-gradient(to right, #84cc16, #22c55e, #10b981);
+        .text-gradient {
+            background: linear-gradient(to right, var(--secondary), var(--primary), var(--accent-void));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .section-divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.2), transparent);
-        }
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--dark-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); }
     </style>
 </head>
 
@@ -102,95 +91,123 @@
 
 <div id="cursorGlow" class="cursor-glow"></div>
 
-<nav class="fixed top-0 w-full z-50 p-6 flex justify-between items-center bg-[#020604]/90 backdrop-blur-xl border-b border-green-900/50">
+<nav class="fixed top-0 w-full z-50 p-6 flex justify-between items-center bg-[#020604]/90 backdrop-blur-md border-b border-green-900/30">
     <div class="flex items-center gap-4">
-        <div class="w-10 h-10 border border-green-700 bg-green-950 flex items-center justify-center font-bold text-lime-400 shadow-[0_0_15px_rgba(34,197,94,0.2)]">S</div>
-        <div>
-            <div class="font-bold text-sm tracking-tight text-green-50">SUPER QUANT CODERS</div>
-            <div class="text-[8px] text-green-500/60 tracking-[0.4em]">NIT JALANDHAR // <span class="text-lime-400/60">RESEARCH_CORE</span></div>
+        <div class="text-primary font-bold tracking-widest text-xl">SQC_OS</div>
+        <div class="h-4 w-[1px] bg-green-900 hidden md:block"></div>
+        <div class="text-[9px] text-green-700 hidden md:block uppercase tracking-[0.3em]">
+            System: <span class="text-secondary">v2.6.4</span> // Latency: <span class="text-secondary">12ms</span>
         </div>
     </div>
-    <div class="hidden md:flex gap-10 text-[9px] tracking-[0.3em] uppercase font-bold">
-        <a href="#home" class="text-green-200/50 hover:text-lime-400 transition">Terminal</a>
-        <a href="#achievements" class="text-green-200/50 hover:text-lime-400 transition">Archive</a>
-        <a href="#social" class="text-green-200/50 hover:text-lime-400 transition">Uplink</a>
-        <button class="bg-green-950/50 border border-green-700 px-5 py-2 text-green-300 hover:border-lime-500 hover:text-white transition-all shadow-[inset_0_0_10px_rgba(34,197,94,0.1)]">
-            INITIALIZE_JOIN
-        </button>
+    <div class="flex gap-8 text-[10px] uppercase font-bold tracking-widest">
+        <a href="#home" class="hover:text-primary transition">Home</a>
+        <a href="#research" class="hover:text-violet-400 transition">Research</a>
+        <a href="#stack" class="hover:text-yellow-400 transition">Stack</a>
+        <a href="#uplink" class="px-3 py-1 border border-primary text-primary hover:bg-primary hover:text-black transition">Uplink</a>
     </div>
 </nav>
 
-<section id="home" class="min-h-screen flex flex-col items-center justify-center pt-24 px-6">
-    <div class="relative group">
-        <img src="/SQC.jpg" class="w-80 md:w-[480px] rounded-lg opacity-80 mix-blend-screen filter sepia(100%) hue-rotate(80deg) saturate(200%) hover:saturate(300%) transition-all duration-700" style="mask-image: radial-gradient(circle, black 50%, transparent 95%);">
-        <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-green-950 border border-green-700 text-green-400 text-[7px] tracking-[0.6em] uppercase whitespace-nowrap shadow-lg">
-            Bio-Frequency: <span class="text-lime-400 animate-pulse">Stable_V3</span> // <span class="text-green-200">Active</span>
-        </div>
+<section id="home" class="min-h-screen flex flex-col items-center justify-center pt-20 px-6">
+    <div class="relative mb-12">
+        <div class="absolute inset-0 bg-primary/20 blur-[100px] rounded-full"></div>
+        <img src="/SQC.jpg" class="w-64 md:w-96 relative z-10 filter sepia(100%) hue-rotate(90deg) brightness(0.8) contrast(1.2) grayscale(0.5) hover:grayscale-0 transition-all duration-500 rounded-2xl border border-green-500/20">
+    </div>
+    <h1 class="text-4xl md:text-7xl text-center font-black leading-tight">
+        SUPER <span class="text-gradient">QUANT</span> CODERS
+    </h1>
+    <p class="mt-6 text-green-500/60 text-[10px] md:text-xs tracking-[1.2em] uppercase text-center">
+        Pioneering Multi-Agent Robotics & Bio-Quant Systems
+    </p>
+</section>
+
+<section id="research" class="py-24 px-6 max-w-7xl mx-auto">
+    <div class="flex items-center gap-4 mb-16">
+        <h2 class="text-2xl font-bold tracking-tighter uppercase italic">Research_Sectors</h2>
+        <div class="h-[1px] flex-grow bg-gradient-to-r from-green-900 to-transparent"></div>
     </div>
 
-    <div class="mt-20 text-center">
-        <h1 class="text-5xl md:text-8xl font-black tracking-tighter leading-none text-green-50">
-            SUPER <span class="text-plasma">QUANT</span> CODERS
-        </h1>
-        <div class="flex items-center justify-center gap-6 mt-8">
-            <div class="h-[1px] w-16 bg-gradient-to-r from-transparent to-green-700"></div>
-            <p class="text-[10px] text-green-400/70 tracking-[1em] uppercase">
-                Robotics <span class="text-lime-500">&</span> Bio-Finance Intel
-            </p>
-            <div class="h-[1px] w-16 bg-gradient-to-l from-transparent to-green-700"></div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="tech-card p-8 border-l-2 border-l-violet-500">
+            <div class="flex justify-between items-start mb-6">
+                <i class="fa-solid fa-brain text-violet-400 text-2xl"></i>
+                <span class="text-[9px] bg-violet-500/20 text-violet-400 px-2 py-1">PHASE_ALPHA</span>
+            </div>
+            <h3 class="text-lg font-bold mb-4">Neural Navigation</h3>
+            <p class="text-sm text-green-100/40 leading-relaxed">Developing bio-inspired traversal algorithms for quadruped units in GPS-denied environments. Focus on SLAM and proprioceptive feedback loops.</p>
+        </div>
+
+        <div class="tech-card p-8 border-l-2 border-l-yellow-500">
+            <div class="flex justify-between items-start mb-6">
+                <i class="fa-solid fa-chart-line text-yellow-400 text-2xl"></i>
+                <span class="text-[9px] bg-yellow-500/20 text-yellow-400 px-2 py-1">PHASE_BETA</span>
+            </div>
+            <h3 class="text-lg font-bold mb-4">Quantum Finance</h3>
+            <p class="text-sm text-green-100/40 leading-relaxed">Optimizing HFT models using genetic algorithms. Investigating the correlation between ESG metrics and algorithmic green-market stability.</p>
         </div>
     </div>
 </section>
 
-<div class="section-divider"></div>
-
-<section id="achievements" class="py-32 px-6 max-w-7xl mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-        <div class="metric-card p-10 rounded-xl group border-l-4 border-l-green-600">
-            <div class="text-green-600/50 text-[10px] mb-6 font-bold tracking-widest">LOG_ENTRY_01</div>
-            <h3 class="text-xl font-bold mb-2 text-green-100 uppercase">SIH 2023</h3>
-            <p class="text-[11px] text-green-400/60 leading-relaxed mb-10">National level dominance in bio-inspired robotics & autonomous systems.</p>
-            <div class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-lime-400 to-green-900">WINNERS</div>
-        </div>
-
-        <div class="metric-card p-10 rounded-xl group border-l-4 border-l-lime-500">
-            <div class="text-green-600/50 text-[10px] mb-6 font-bold tracking-widest">LOG_ENTRY_02</div>
-            <h3 class="text-xl font-bold mb-2 text-green-100 uppercase">QUANT HACK</h3>
-            <p class="text-[11px] text-green-400/60 leading-relaxed mb-10">Algorithmic efficiency benchmarks surpassed in green-tech markets.</p>
-            <div class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-green-400 to-green-900">TOP_ELITE</div>
-        </div>
-
-        <div class="metric-card p-10 rounded-xl group border-l-4 border-l-emerald-400">
-            <div class="text-green-600/50 text-[10px] mb-6 font-bold tracking-widest">LOG_ENTRY_03</div>
-            <h3 class="text-xl font-bold mb-2 text-green-100 uppercase">Deployments</h3>
-            <p class="text-[11px] text-green-400/60 leading-relaxed mb-10">Real-time hardware optimization for Quadruped units (v2.6 Stable).</p>
-            <div class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-emerald-400 to-green-900">5.2K_UNITS</div>
-        </div>
-    </div>
-</section>
-
-<footer class="py-20 bg-[#010a05] border-t border-green-900/30">
-    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
-        <div class="text-[10px] text-green-900 tracking-[0.5em] uppercase">
-            UNIT // <span class="text-green-700">QUAD_PRO_02</span> // <span class="text-green-700">ECO_QUANT</span>
-        </div>
+<section id="stack" class="py-24 bg-green-950/10 border-y border-green-900/20">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-[10px] tracking-[1em] text-center text-primary mb-16 uppercase">Hardware_Core_Stack</h2>
         
-        <div class="flex gap-8">
-            <a href="#" class="text-green-800 hover:text-lime-400 transition text-xl"><i class="fa-brands fa-github"></i></a>
-            <a href="#" class="text-green-800 hover:text-green-400 transition text-xl"><i class="fa-brands fa-linkedin"></i></a>
-            <a href="#" class="text-green-800 hover:text-emerald-400 transition text-xl"><i class="fa-brands fa-discord"></i></a>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div class="p-6 border border-white/5 hover:bg-white/5 transition">
+                <div class="text-2xl mb-4 text-primary"><i class="fa-solid fa-microchip"></i></div>
+                <div class="text-[10px] font-bold">JETSON ORIN</div>
+                <div class="text-[8px] text-green-700 mt-1">Edge AI Compute</div>
+            </div>
+            <div class="p-6 border border-white/5 hover:bg-white/5 transition">
+                <div class="text-2xl mb-4 text-secondary"><i class="fa-solid fa-gauge-high"></i></div>
+                <div class="text-[10px] font-bold">ROS2 HUMBLE</div>
+                <div class="text-[8px] text-green-700 mt-1">Middleware Dev</div>
+            </div>
+            <div class="p-6 border border-white/5 hover:bg-white/5 transition">
+                <div class="text-2xl mb-4 text-violet-400"><i class="fa-solid fa-network-wired"></i></div>
+                <div class="text-[10px] font-bold">TCP/UDP_CORE</div>
+                <div class="text-[8px] text-green-700 mt-1">Low Latency Comms</div>
+            </div>
+            <div class="p-6 border border-white/5 hover:bg-white/5 transition">
+                <div class="text-2xl mb-4 text-yellow-500"><i class="fa-solid fa-bolt"></i></div>
+                <div class="text-[10px] font-bold">CAN_BUS v3</div>
+                <div class="text-[8px] text-green-700 mt-1">Actuator Control</div>
+            </div>
         </div>
+    </div>
+</section>
 
-        <div class="text-[9px] text-green-900 font-bold">
-            © 2026 SQC // GREEN_STABLE_ENVIRONMENT
+<section class="py-12 px-6">
+    <div class="max-w-7xl mx-auto tech-card p-4 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="flex items-center">
+            <span class="status-dot text-primary bg-primary"></span>
+            <span class="text-[9px] tracking-widest uppercase">Robotics Lab: <span class="text-primary">ONLINE</span></span>
         </div>
+        <div class="flex items-center">
+            <span class="status-dot text-yellow-500 bg-yellow-500"></span>
+            <span class="text-[9px] tracking-widest uppercase">Trading Engine: <span class="text-yellow-500">BACKTESTING</span></span>
+        </div>
+        <div class="flex items-center">
+            <span class="status-dot text-violet-500 bg-violet-500"></span>
+            <span class="text-[9px] tracking-widest uppercase">Core Commits: <span class="text-violet-500">5,241 TOTAL</span></span>
+        </div>
+    </div>
+</section>
+
+<footer id="uplink" class="py-20 border-t border-green-900/30 text-center">
+    <div class="flex justify-center gap-10 mb-10">
+        <a href="#" class="text-2xl hover:text-primary transition"><i class="fa-brands fa-github"></i></a>
+        <a href="#" class="text-2xl hover:text-secondary transition"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="#" class="text-2xl hover:text-violet-400 transition"><i class="fa-brands fa-discord"></i></a>
+    </div>
+    <div class="text-[8px] text-green-900 tracking-[1em] uppercase">
+        NIT Jalandhar // Super Quant Coders // Est 2022
     </div>
 </footer>
 
 <script>
     const glow = document.getElementById("cursorGlow");
     let mouseX = 0, mouseY = 0, ballX = 0, ballY = 0;
-    const speed = 0.05;
+    const speed = 0.08;
 
     window.addEventListener("mousemove", e => {
         mouseX = e.clientX;
